@@ -9,6 +9,9 @@ const dotenv=require('dotenv');
 dotenv.config();
 
 const app = express();
+
+app.use(cors({origin: 'http://localhost:3001',}))
+
 const PORT = process.env.PORT || 5000;
 
 // MongoDB connection URL
@@ -32,13 +35,12 @@ mongoose.connect(url, options)
 
 
 
+app.use(express.json());
 app.use('/',require('./routes'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 
-
-// app.use(express.json());
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

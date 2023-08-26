@@ -1,7 +1,7 @@
 const express=require('express');
 const router = express.Router();
 const bodyParser = require('body-parser');
-const userControllers=require('../controllers/userControllers')
+const userControllers=require('../controllers/userControllers');
 
 router.get('/', (req, res) => {
     console.log("Hello we are on home page");
@@ -9,6 +9,7 @@ router.get('/', (req, res) => {
 });
 
 router.post('/login', userControllers.Login);
+router.post('/signup', userControllers.Signup);
 
 
 
