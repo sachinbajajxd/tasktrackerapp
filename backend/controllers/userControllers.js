@@ -93,3 +93,34 @@ module.exports.Signup = async (req, res) => {
       }
 } 
 
+module.exports.tasks = async (req, res) => {
+    console.log(req.id, "user._id");
+    const userId = req.id;
+
+    
+    const newTask = new Task({
+        userId: userId,
+        title: 'Complete Assignment',
+        description: 'Finish the project by tomorrow',
+        priority: 'High',
+        dueDate: new Date('2023-08-31'),
+        // ... other fields ...
+    });
+    
+    // newTask.save()
+    //     .then(savedTask => {
+    //     console.log('Task saved:', savedTask);
+    //     })
+    //     .catch(error => {
+    //     console.error('Error saving task:', error);
+    //     });
+
+    try {
+        const tasks = await Task.find({ userId }); // Fetch tasks belonging to the user
+        console.log(tasks);
+        res.json(tasks);
+      } catch (error) {
+        res.status(500).json({ message: 'Error fetching tasks', error });
+      }
+}
+

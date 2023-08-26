@@ -1,10 +1,11 @@
 const mongoose = require('mongoose');
+const User = require('./User')
 
 const taskSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   title: {
     type: String,
-    requires: true
+    required: true
   },
   description: {
     type: String,
@@ -12,7 +13,6 @@ const taskSchema = new mongoose.Schema({
   },
   dueDate: {
     type: Date,
-    required: true
   },
   priority: {
     type: String,

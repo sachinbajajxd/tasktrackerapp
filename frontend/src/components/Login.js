@@ -19,8 +19,10 @@ const Login = () => {
         });
         console.log('Login successful:', response.data);
         const token=response.data.token;
+        const userId=response.data.user._id;
         console.log(token);
         localStorage.setItem('token', token);
+        localStorage.setItem('userId', userId);
         navigate('/home');
         
       } catch (error) {
