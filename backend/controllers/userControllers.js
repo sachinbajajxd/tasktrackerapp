@@ -93,27 +93,39 @@ module.exports.Signup = async (req, res) => {
       }
 } 
 
+module.exports.CreateTask = async(req, res) => {
+    // console.log(req.body);
+    const userId = req.id;
+
+    const newTask = new Task({
+        userId: userId,
+        title: req.body.title,
+        description: req.body.description,
+        dueDate: req.body.dueDate,
+        priority: req.body.priority,
+    });
+
+    // console.log(newTask);
+    
+    newTask.save()
+        .then(savedTask => {
+        console.log('Task saved:', savedTask);
+        res.status(202).json({
+            message: "Task created successfully"
+        })
+        })
+        .catch(error => {
+        console.error('Error saving task:', error);
+        res.status(500).json({
+            message: `${error}`
+        })
+        });
+}
+
 module.exports.tasks = async (req, res) => {
     console.log(req.id, "user._id");
     const userId = req.id;
 
-    
-    const newTask = new Task({
-        userId: userId,
-        title: 'Complete Assignment',
-        description: 'Finish the project by tomorrow',
-        priority: 'High',
-        dueDate: new Date('2023-08-31'),
-        // ... other fields ...
-    });
-    
-    // newTask.save()
-    //     .then(savedTask => {
-    //     console.log('Task saved:', savedTask);
-    //     })
-    //     .catch(error => {
-    //     console.error('Error saving task:', error);
-    //     });
 
     try {
         const tasks = await Task.find({ userId }); // Fetch tasks belonging to the user
@@ -122,5 +134,20 @@ module.exports.tasks = async (req, res) => {
       } catch (error) {
         res.status(500).json({ message: 'Error fetching tasks', error });
       }
+}
+
+module.exports.deleteTask = async(req, res) => {
+    const userId = req.id;
+    try{
+        const { id } = req.params;
+        console.log(id, 'req.params');
+        const deletedItem = await Task.findByIdAndDelete({_id: id});
+        console.log(deletedItem);
+    
+        res.status(200).json({message: "Item deleted successfully"});
+    
+    }catch(error){
+        res.status(500).json({ error: error.message});
+    }
 }
 
