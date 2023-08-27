@@ -1,23 +1,27 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
 
-const Form = () => {
+const UpdateTask = (props) => {
 
   // Check if the token exists in local storage
   const navigate = useNavigate();
+  const location = useLocation();
   const isAuthenticated = !!localStorage.getItem('token');
 
   if (!isAuthenticated) {
       navigate('/');
   }  
 
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [dueDate, setDueDate] = useState('');
-  const [priority, setPriority] = useState('');
+  const propsData = location.state;
+
+  const [title, setTitle] = useState(propsData.title);
+  const [description, setDescription] = useState(propsData.description);
+  const [dueDate, setDueDate] = useState(propsData.dueDate);
+  const [priority, setPriority] = useState(propsData.priority);
   const token = localStorage.getItem('token');
+
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -29,54 +33,56 @@ const Form = () => {
       priority,
     };
 
-    axios.post('http://localhost:3000/createtask', taskData, {
+    const id = propsData._id
+
+    axios.put(`http://localhost:3000/tasks/${id}`, taskData, {
             headers: {
               'Authorization': `Bearer ${token}`
             }
     })
       .then(response => {
-        console.log('Task created:', response.data);
+        console.log('Task updated:', response.data);
+        toast.success('Task updated successfully');
         setTitle('');
         setDescription('');
         setDueDate('');
         setPriority('');
-        toast.success('Task created successfully');
         navigate('/home');
       })
       .catch(error => {
-        console.error('Error creating task:', error);
-        toast.error(`Error creating task ${error}`);
+        console.error('Error updating task:', error);
+        toast.error(`Error in updating task ${error}`);
       });
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white shadow-md rounded-md w-96 p-6">
-        <h2 className="text-xl font-semibold mb-4">Create a Task</h2>
+        <h2 className="text-xl font-semibold mb-4">Update your Task</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
             type="text"
             placeholder="Title"
             value={title}
             onChange={e => setTitle(e.target.value)}
-            className="border border-gray-300 p-2 w-full rounded" required
+            className="border border-gray-300 p-2 w-full rounded"
           />
           <textarea
             placeholder="Description"
             value={description}
             onChange={e => setDescription(e.target.value)}
-            className="border border-gray-300 p-2 w-full h-32 rounded" required
+            className="border border-gray-300 p-2 w-full h-32 rounded"
           />
           <input
             type="date"
             value={dueDate}
             onChange={e => setDueDate(e.target.value)}
-            className="border border-gray-300 p-2 w-full rounded" required
+            className="border border-gray-300 p-2 w-full rounded"
           />
           <select
             value={priority}
             onChange={e => setPriority(e.target.value)}
-            className="border border-gray-300 p-2 w-full rounded" required
+            className="border border-gray-300 p-2 w-full rounded"
           >
             <option value="">Select Priority</option>
             <option value="1">1</option>
@@ -84,13 +90,12 @@ const Form = () => {
             <option value="3">3</option>
             <option value="4">4</option>
             <option value="5">5</option>
-            <option value="6">6</option>
           </select>
           <button
             type="submit"
             className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-300"
           >
-            Create Task
+            Update
           </button>
         </form>
       </div>
@@ -98,4 +103,4 @@ const Form = () => {
   );
 }
 
-export default Form;
+export default UpdateTask;

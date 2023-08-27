@@ -126,10 +126,27 @@ module.exports.tasks = async (req, res) => {
     console.log(req.id, "user._id");
     const userId = req.id;
 
+    const { search } = req.query;
+    console.log(search, 'search');
 
     try {
-        const tasks = await Task.find({ userId }); // Fetch tasks belonging to the user
-        console.log(tasks);
+
+        let query = { userId };
+        console.log(query, "Query");
+
+        if (search) {
+            query = {
+                ...query,
+                $or: [
+                    { title: { $regex: search, $options: 'i' } }, // Case-insensitive title search
+                    { description: { $regex: search, $options: 'i' } } // Case-insensitive description search
+                ]
+            };
+        }
+
+        const tasks = await Task.find(query)
+            .sort({ priority: -1, dueDate: -1 });; // Fetch tasks belonging to the user
+        // console.log(tasks);
         res.json(tasks);
       } catch (error) {
         res.status(500).json({ message: 'Error fetching tasks', error });
@@ -148,6 +165,35 @@ module.exports.deleteTask = async(req, res) => {
     
     }catch(error){
         res.status(500).json({ error: error.message});
+    }
+}
+
+module.exports.updateTask = async(req, res) => {
+    const userId = req.id;
+
+    console.log(req.params.id, 'req.params');
+    const id=req.params.id;
+
+    console.log(req.body);
+    console.log(userId);
+
+    const { title, description, dueDate, priority} = req.body;
+
+    try{
+        const updatedTask = { title, description, dueDate, priority, userId, _id: id };
+        console.log(updatedTask);
+
+        await Task.findByIdAndUpdate(id, updatedTask, {
+        new: true,
+        });
+    
+        res.status(200).json(updatedTask);
+
+    }catch(error){
+        res.status(500).json({
+            error: error.message,
+            success: false,
+        });
     }
 }
 

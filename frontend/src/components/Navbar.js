@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import toast, { Toaster } from 'react-hot-toast';
 
 
 const Navbar = () => {
@@ -12,6 +13,7 @@ const Navbar = () => {
   const handleLogout = () =>{
     localStorage.clear();
     setIsLoggedIn(false);
+    toast.success('Logged out successfully');
     navigate('/');
   }
 
@@ -28,13 +30,6 @@ const Navbar = () => {
                 TaskList
                 </Link>
             )}
-        {token && (
-          <input
-            type="text"
-            placeholder="Search tasks"
-            className="bg-white text-gray-800 py-1 px-2 rounded"
-          />
-        )}
       </div>
       <div>
         {token ? (

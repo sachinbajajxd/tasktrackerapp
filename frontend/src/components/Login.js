@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import toast, { Toaster } from 'react-hot-toast';
 
 const Login = () => {
     const navigate = useNavigate();
@@ -23,10 +24,14 @@ const Login = () => {
         console.log(token);
         localStorage.setItem('token', token);
         localStorage.setItem('userId', userId);
+        localStorage.setItem('username', response.data.user.username);
+
+        toast.success('Login successful');
         navigate('/home');
         
       } catch (error) {
         setError('Login failed. Please try again.', error);
+        toast.error(`Login failed. Please try again. ${error}`);
     }
   };
 

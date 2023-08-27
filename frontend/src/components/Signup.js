@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import Navbar from './Navbar';
+import toast, { Toaster } from 'react-hot-toast';
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -25,10 +25,12 @@ const Signup = () => {
             email,
             password
         });
-        console.log('Login successful:', response.data);
+        console.log('Signup successful:', response.data);
+        toast.success('Sign up successful, please login to proceed');
         navigate('/');
       } catch (error) {
         setError('Signup failed. Please try again.');
+        toast.error(`Signup failed. Please try again ${error}`);
     }
   };
 

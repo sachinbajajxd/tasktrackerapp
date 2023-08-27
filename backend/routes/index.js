@@ -23,7 +23,7 @@ function verifyToken(req, res, next) {
       }
     //   console.log(decoded);
       req.id = decoded.user._id;
-    //   console.log(req.id);
+      console.log(req.id,'Req');
       next();
     });
   }
@@ -38,6 +38,7 @@ router.post('/signup', userControllers.Signup);
 router.get('/tasks/:userId', verifyToken, userControllers.tasks);
 router.post('/createtask', verifyToken, userControllers.CreateTask);
 router.delete('/tasks/:id', verifyToken, userControllers.deleteTask);
+router.put('/tasks/:id', verifyToken, userControllers.updateTask);
 
 
 
