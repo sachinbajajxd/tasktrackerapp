@@ -24,7 +24,7 @@ const Home = () => {
     // Create a URL parameter for search query
     const searchParam = search ? `?search=${search}` : '';
     
-    axios.get(`http://localhost:3000/tasks/${userId}${searchParam}`, {
+    axios.get(`https://tasktrackerapp-qeum.onrender.com/tasks/${userId}${searchParam}`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -38,7 +38,7 @@ const Home = () => {
 
     const token = localStorage.getItem('token');
 
-    axios.delete(`http://localhost:3000/tasks/${id}`, {
+    axios.delete(`https://tasktrackerapp-qeum.onrender.com/tasks/${id}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }

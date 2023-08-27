@@ -35,7 +35,7 @@ const UpdateTask = (props) => {
 
     const id = propsData._id
 
-    axios.put(`http://localhost:3000/tasks/${id}`, taskData, {
+    axios.put(`https://tasktrackerapp-qeum.onrender.com/tasks/${id}`, taskData, {
             headers: {
               'Authorization': `Bearer ${token}`
             }

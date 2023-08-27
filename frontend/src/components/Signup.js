@@ -20,7 +20,7 @@ const Signup = () => {
     }
 
     try {
-        const response = await axios.post('http://localhost:3000/signup', {
+        const response = await axios.post('https://tasktrackerapp-qeum.onrender.com/signup', {
             username,
             email,
             password
